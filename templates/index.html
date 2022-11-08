@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width initial-scale=1'>
+    <meta name="referrer" content="no-referrer">
+    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <link rel="stylesheet" href="/static/css/news.css">
+    <link rel="stylesheet" href="/static/skin/jedate.css">
+    <script src="/static/js/jedate.js"></script>
+    <title>每日早报</title>
+</head>
+<body class='typora-export os-windows'>
+<div class='typora-export-content'>
+    <div id='write'>
+        <h1 id='center'>每日早报</h1>
+        <blockquote>
+                <div id="date">{{.DATA.DATE}}</div>
+            <input id="indate" type="text" placeholder="点我切换每日早报"  readonly>
+            <div id="dateinfo"><div>
+        </blockquote>
+        <ol id="news">
+            {{range $news := .DATA.NEWS}}<li>{{$news}}</li>
+            {{end}}</ol>
+        <blockquote>
+            <em><span id="weiyu">{{.DATA.WEIYU}}</span></em>
+        </blockquote>
+    </div>
+</div>
+<script type="text/javascript">
+    /**
+     * jeDate 演示
+     */
+    var enLang = {
+        name  : "en",
+        month : ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
+        weeks : [ "SUN","MON","TUR","WED","THU","FRI","SAT" ],
+        times : ["Hour","Minute","Second"],
+        timetxt: ["Time","Start Time","End Time"],
+        backtxt:"Back",
+        clear : "Clear",
+        today : "Now",
+        yes   : "Confirm",
+        close : "Close"
+    }
+    //常规选择
+    // 获取当前日期
+    var date = new Date();
+
+    // 获取当前月份
+    var nowMonth = date.getMonth() + 1;
+
+    // 获取当前是几号
+    var strDate = date.getDate();
+
+    // 添加分隔符“-”
+    var seperator = "/";
+
+    // 对月份进行处理，1-9月在前面添加一个“0”
+    if (nowMonth >= 1 && nowMonth <= 9) {
+        nowMonth = "0" + nowMonth;
+    }
+
+    // 对月份进行处理，1-9号在前面添加一个“0”
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    // 最后拼接字符串，得到一个格式为(yyyy-MM-dd)的日期
+    var nowDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
+    jeDate("#indate",{
+
+        maxDate:nowDate,
+        festival: true,
+        format: 'YYYY/MM/DD ',
+        donefun: function(obj){
+            var aDate = new Date(obj.val); // 通过日期字符串，初始化第一个日期对象
+            var bDate = new Date(nowDate); // 同上，初始化第二个日期对象
+            var aDay = 24 * 60 * 60 * 1000; // 完整一天有24小时，将小时换算成毫秒时间戳
+            var diffDay = (bDate - aDate) / aDay; // 计算间隔天数（注意日期隐式转换）
+            window.location.href="/?index="+diffDay;
+        }
+    });
+</script>
+</body>
+</html>
